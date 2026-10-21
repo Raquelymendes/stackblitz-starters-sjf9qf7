@@ -43,4 +43,31 @@ app.get('/produtos/:id', (req, res) => {
   res.json(produto);
 });
 
+app.put('produtos/:id', (req, res) => {
+  const id = Number(req.params.id);
+  const produto = produtos. find(p => p.id === id);
+
+  if(!produto) {
+    return res.status(404).json({erro: 'Produto não encontrado'});
+  }
+
+  const { nome, preco } = req.body;
+  if (nome !== undefined) produto.nome = nome;
+  if (preco !== undefined) produto.preco = preco;
+
+  res.json(produto);
+});
+
+app.delete('/produtos/:id', (req, res) => {
+  const id = Number(req.params.id);
+  const indice = produtos. findIndex(p => p.id === id);
+
+  if (indice === -1) {
+    return res.status(404).json({ erro: 'Produto não encontrado' });
+  }
+
+  produtos.splice(indice, 1);
+  res.status(204).send();
+});
+
 app.listen(3000, () => console.log('Servidor rodando na porta 3000'));
